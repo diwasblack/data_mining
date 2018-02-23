@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+
+\title{Assignment for CS 641 \\ (Data Mining)}
+\author{Diwas Sharma}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\section{Problem 1}
+The outcome of 6-sided dice can be modelled using the multinomial
+distribution. Let $\theta_{i}$ be the probability that side $i$ shows up,
+and $n_{i}$ the number of times the side ${i}$ appears in the experiment. Then we
+have,
+
+\begin{equation}
+\label{eq:theta_sum}
+\sum_{1}^{6}\theta_{i} = 1
+\end{equation}
+
+\begin{equation}
+\label{eq:n_sum}
+\sum_{1}^{6}n_{i} = n
+\end{equation}
+where $n$ is the total number of experiments.
+
+Then, the likelihood of the data given $\theta$s, can be calculated as
+
+\begin{equation}
+l(n|\theta) = \theta_{1}^{n_1}\theta_{2}^{n_2}\theta_{3}^{n_3}\theta_{4}^{n_4}\theta_{5}^{n_5}\theta_{6}^{n_6}
+\end{equation}
+
+After taking log of likelihood function we get,
+\begin{equation}
+\label{eq:objective}
+L(\theta_{1}\theta_{2}..\theta_{6})=\sum_{1}^{6}n_i.log(\theta_{i})
+\end{equation}
+
+Then The goal is to maximize equation~\ref{eq:objective} subjected to
+constraint given in equation~\ref{eq:theta_sum}. This can be done by 
+adding lagrange multipliers into the equation~\ref{eq:objective}
+\begin{equation}
+F(\theta_{1}..\theta_{6},\lambda) = L(\theta_{1}\theta_{2}..\theta_{6}) + \lambda.(\sum_{1}^6\theta_{i} - 1)
+\end{equation}
+
+We can solve for $\theta$s by setting the gradient of the function to zero.
+
+\begin{equation}
+\nabla F(\theta_{1}..\theta_{6},\lambda) = 0
+\end{equation}
+
+By solving above equation we get,
+
+\begin{equation}
+\label{eq:theta_lambda}
+\theta_{i} = -\frac{n_{i}}{\lambda}
+\end{equation}
+
+Substituting equation~\ref{eq:theta_lambda} into equation~\ref{eq:theta_sum} and
+using equation~\ref{eq:n_sum}, we get $\lambda=-n$. So the equation~\ref{eq:theta_lambda}
+becomes
+
+\begin{equation}
+\theta_{i} = \frac{n_{i}}{n}
+\end{equation}
+which is the required probability for the face $i$.
+
+\section{Problem 2}
+
+\begin{lstinputlisting}[language=python]{pageranking.py}
+\end{lstinputlisting}
+
+\end{document}

@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{listings}
+
+\title{Assignment for CS 641 \\ (Data Mining)}
+\author{Diwas Sharma}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\section{}
+\subsection{Source Code}
+\begin{lstinputlisting}[language=python]{knn.py}
+\end{lstinputlisting}
+
+\subsection{Runtime performance of predict function}
+
+For K = 25, \newline
+19.3 ms $\pm$ 719 $\mu$s per loop (mean $\pm$ std dev of 7 runs, 10 loops each)\newline
+For K = 5, \newline
+18.6 ms $\pm$ 473 $\mu$s per loop (mean $\pm$ std dev of 7 runs, 10 loops each)\newline
+For K = 1, \newline
+19.6 ms $\pm$ 3.26 ms per loop (mean $\pm$ std dev of 7 runs, 10 loops each)
+
+
+\subsection{Plot of Accuracy against K}
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{validation_accuracy.png}
+  \caption{Plot of accuracy against K}
+  \label{fig:accuracy_plot}
+\end{figure}
+The plot of accuracy against K is shown in figure \ref{fig:accuracy_plot}
+
+\subsection{Best K for the highest accuracy}
+One of the value that has the highest accuracy is K=1
+
+\subsection{Accuracy}
+The accuracy obtained for the best K having the highest accuracy cannot be
+used to report the accuracy of the algorithm to the user because the hyperparameter
+K might overfit the test data which will result in better training performance
+but a poor generalization performance for new data.
+
+\end{document}
