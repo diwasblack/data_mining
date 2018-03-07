@@ -31,15 +31,9 @@ class KNN(object):
 
         self.labels = set(self.y_train)
 
-    def measure_distance(self, first_vector, second_vector):
-        return norm(second_vector - first_vector)
-
     def predict_label(self, input_vector, k):
-        def distance_function(vector):
-            return self.measure_distance(vector, input_vector)
 
-        distances_iterator = (distance_function(x) for x in self.X_train)
-        distances = np.fromiter(distances_iterator, float)
+        distances = norm(np.array(input_vector) - self.X_train, axis=1)
 
         sorted_distances = sorted(
             zip(distances, self.y_train),
