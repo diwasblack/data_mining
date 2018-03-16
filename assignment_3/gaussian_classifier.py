@@ -25,7 +25,7 @@ def gaussian_distribution_value(x, mu, sigma):
     """
 
     x_minus_mu = x - mu
-    sigma_det = pow(np.linalg.det(sigma), len(x) / 2.0)
+    sigma_det = np.linalg.det(sigma)
 
     exponent = np.exp(
         -np.dot(
@@ -34,7 +34,7 @@ def gaussian_distribution_value(x, mu, sigma):
         ) / 2.0
     )
 
-    value = exponent / (math.sqrt(2 * math.pi) * sigma_det)
+    value = exponent / (math.sqrt(pow(2 * math.pi, len(x)) * sigma_det))
 
     return value
 
