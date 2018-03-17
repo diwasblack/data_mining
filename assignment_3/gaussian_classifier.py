@@ -1,22 +1,20 @@
 import math
+import pickle
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 
-def load_dataset():
-    x = np.linspace(0, 1, 200)
-    y = np.zeros_like(x, dtype=np.int32)
+def solve_quadratic_equation(a, b, c):
+    b_square_minus_four_ac = pow(b, 2) - 4 * a * c
 
-    x[0:100] = np.sin(4 * np.pi * x)[0:100]
-    x[100:200] = np.cos(4 * np.pi * x)[100:200]
+    if b_square_minus_four_ac < 0:
+        raise Exception("Imaginary Value")
+    else:
+        y1 = (-b + b_square_minus_four_ac) / (2 * a)
+        y2 = (-b - b_square_minus_four_ac) / (2 * a)
 
-    y = 4 * np.linspace(0, 1, 200) + 0.3 * np.random.randn(200)
-
-    label = np.ones_like(x)
-    label[0:100] = 0
-
-    return x, y, label
+        return y1, y2
 
 
 def gaussian_distribution_value(x, mu, sigma):
@@ -98,9 +96,25 @@ class GaussianClassifier():
         else:
             return 1
 
+    def plot(self):
+        plt.scatter(*zip(*self.x_train), c=self.y_train)
+        if(self.lda):
+            x = np.linspace(-2, 2, 100)
+
+            # Calculate y
+            y = -0.282 * x + 1.973
+
+        plt.plot(x, y)
+        plt.show()
+
 
 if __name__ == "__main__":
-    classifier = GaussianClassifier()
-    classifier.fit(*load_dataset())
+    classifier = GaussianClassifier(lda=True)
+    with open("dataset.pkl", "rb") as file:
+        dataset = pickle.load(file)
+
+    classifier.fit(*dataset)
+
     print(classifier.predict(0.0, -0.30))
     print(classifier.predict(-0.99, 2.82))
+    classifier.plot()
