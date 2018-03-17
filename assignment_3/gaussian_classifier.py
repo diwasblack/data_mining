@@ -5,14 +5,30 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+def generate_dataset():
+    x = np.linspace(0, 1, 200)
+    y = np.zeros_like(x, dtype=np.int32)
+
+    x[0:100] = np.sin(4 * np.pi * x)[0:100]
+    x[100:200] = np.cos(4 * np.pi * x)[100:200]
+
+    y = 4 * np.linspace(0, 1, 200) + 0.3 * np.random.randn(200)
+
+    label = np.ones_like(x)
+    label[0:100] = 0
+
+    with open("dataset.pkl", "wb") as file:
+        pickle.dump((x, y, label), file)
+
+
 def solve_quadratic_equation(a, b, c):
     b_square_minus_four_ac = pow(b, 2) - 4 * a * c
 
     if b_square_minus_four_ac < 0:
         raise Exception("Imaginary Value")
     else:
-        y1 = (-b + b_square_minus_four_ac) / (2 * a)
-        y2 = (-b - b_square_minus_four_ac) / (2 * a)
+        y1 = (-b + math.sqrt(b_square_minus_four_ac)) / (2 * a)
+        y2 = (-b - math.sqrt(b_square_minus_four_ac)) / (2 * a)
 
         return y1, y2
 
@@ -98,18 +114,45 @@ class GaussianClassifier():
 
     def plot(self):
         plt.scatter(*zip(*self.x_train), c=self.y_train)
-        if(self.lda):
-            x = np.linspace(-2, 2, 100)
+        x = np.linspace(-2, 2, 1000)
 
+        if(self.lda):
             # Calculate y
             y = -0.282 * x + 1.973
 
-        plt.plot(x, y)
+            decision_boundary, = plt.plot(
+                x, y, label="LDA decision boundary")
+        else:
+            a = 2.092
+
+            x_points = []
+            y_points = []
+
+            for x_point in x:
+                b = 5.722 * x_point + 5.497
+                c = (1.681 * (x_point ** 2)) - (6.081 * x_point) - 18.873
+
+                try:
+                    y1, y2 = solve_quadratic_equation(a, b, c)
+                except:
+                    continue
+
+                x_points.append(x_point)
+                y_points.append(y1)
+
+            decision_boundary, = plt.plot(
+                x_points,
+                y_points,
+                label="QDA decision boundary"
+            )
+
+        plt.legend(handles=[decision_boundary])
         plt.show()
 
 
 if __name__ == "__main__":
-    classifier = GaussianClassifier(lda=True)
+    classifier = GaussianClassifier()
+
     with open("dataset.pkl", "rb") as file:
         dataset = pickle.load(file)
 
