@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{listings}
+
+\title{Assignment for CS 641 \\ (Data Mining)}
+\author{Diwas Sharma}
+\date{\today}
+\begin{document}
+
+\maketitle
+\newpage
+
+\section{Linear Discriminant Analysis}
+
+\subsection{Linear Discriminant Analysis}
+\subsubsection{Decision boundary}
+For any two dimensionaly point $(x, y)$, the decision boundary of LDA is
+equation \ref{eq:lda_equation} whose plot is shown in figure \ref{fig:lda_decision_boundary}
+
+\begin{equation}
+    \label{eq:lda_equation}
+    0.798 x + 2.82 y - 5.556 = 0
+\end{equation}
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{lda.png}
+  \caption{Decision boundary for LDA}
+  \label{fig:lda_decision_boundary}
+\end{figure}
+
+\subsection{Quadratic Discriminant Analysis}
+\subsubsection{Decision boundary}
+Similarly, the decision boundary of QDA is equation \ref{eq:qda_equation}
+whose plot is shown in figure \ref{fig:qda_decision_boundary}
+\begin{equation}
+    \label{eq:qda_equation}
+    1.681 x^{2} - 6.0181 x + 2.092 y^{2} + 5.497y + 5.722xy - 18.873
+\end{equation}
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{qda.png}
+  \caption{Decision boundary for QDA}
+  \label{fig:qda_decision_boundary}
+\end{figure}
+
+\section{Source Code}
+\begin{lstinputlisting}[language=python]{gaussian_classifier.py}
+\end{lstinputlisting}
+
+\end{document}
