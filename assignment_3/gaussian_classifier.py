@@ -122,6 +122,10 @@ class GaussianClassifier():
 
             decision_boundary, = plt.plot(
                 x, y, label="LDA decision boundary")
+            plt.legend(handles=[decision_boundary])
+            plt.xlabel('x')
+            plt.ylabel('y')
+            plt.savefig("lda.png")
         else:
             a = 2.092
 
@@ -146,8 +150,10 @@ class GaussianClassifier():
                 label="QDA decision boundary"
             )
 
-        plt.legend(handles=[decision_boundary])
-        plt.show()
+            plt.legend(handles=[decision_boundary])
+            plt.xlabel('x')
+            plt.ylabel('y')
+            plt.savefig("qda.png")
 
 
 if __name__ == "__main__":
