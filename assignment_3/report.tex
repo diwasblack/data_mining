@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{amsmath} 
 
 \title{Assignment for CS 641 \\ (Data Mining)}
 \author{Diwas Sharma}
@@ -15,13 +16,29 @@
 
 \subsection{Linear Discriminant Analysis}
 \subsubsection{Decision boundary}
-For any two dimensionaly point $(x, y)$, the decision boundary of LDA is
-equation \ref{eq:lda_equation} whose plot is shown in figure \ref{fig:lda_decision_boundary}
+For any point $X = \begin{bmatrix}x \\ y\end{bmatrix}$, the general decision boundary of LDA for the given problem is shown in
+equation \ref{eq:lda_equation}.
 
 \begin{equation}
     \label{eq:lda_equation}
-    0.798 x + 2.82 y - 5.556 = 0
+    (X-\mu_{1})^{T}\Sigma^{-1}(X - \mu_{1}) - (X-\mu_{2})^{T}\Sigma^{-1}(X - \mu_{2}) = 0
 \end{equation}
+
+where, $\mu{1}$ is the average of class 1,
+$\mu{2}$ is the average of class 2, and
+$\Sigma$ is the covariance matrix of the data
+
+The equation can be simplified to obtain equation \ref{eq:lda_equation_simple} which is a linear
+equation in $X$.
+
+\begin{equation}
+    \label{eq:lda_equation_simple}
+    (\Sigma^{-1}\mu_{1} -  \Sigma^{-1}\mu_{2}) X + \frac{1}{2}(-\mu^{T}_{1}\Sigma^{-1}\mu_{1} + \mu^{T}_{2}\Sigma^{-1}\mu_{2}) = 0
+\end{equation}
+
+If we plot the decision boundary, we would get results similar to one
+shown in figure \ref{fig:lda_decision_boundary}.
+
 
 \begin{figure}[!ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{lda.png}
@@ -31,21 +48,22 @@ equation \ref{eq:lda_equation} whose plot is shown in figure \ref{fig:lda_decisi
 
 \subsection{Quadratic Discriminant Analysis}
 \subsubsection{Decision boundary}
-Similarly, the decision boundary of QDA is equation \ref{eq:qda_equation}
-whose plot is shown in figure \ref{fig:qda_decision_boundary}
+Similarly, the general decision boundary of QDA for the given problem is shown in equation \ref{eq:qda_equation}, which is a quadratic equation in X.
+
 \begin{equation}
     \label{eq:qda_equation}
-    1.681 x^{2} - 6.0181 x + 2.092 y^{2} + 5.497y + 5.722xy - 18.873
+    (X-\mu_{1})^{T}\Sigma^{-1}_{1}(X - \mu_{1}) - (X-\mu_{2})^{T}\Sigma^{-1}_{2}(X - \mu_{2})
+    + \frac{1}{2}(-\ln{\begin{vmatrix}\Sigma_{1}\end{vmatrix}} + \ln{\begin{vmatrix}\Sigma_{2}\end{vmatrix}})= 0
 \end{equation}
+
+where, $\Sigma_{1}$ is the covariance of data that belongs to class 1, and $\Sigma_{2}$ is the covariance of data that belongs to class 2.
+
+The plot of decision boundary obtain is shown in figure \ref{fig:qda_decision_boundary}.
 
 \begin{figure}[!ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{qda.png}
   \caption{Decision boundary for QDA}
   \label{fig:qda_decision_boundary}
 \end{figure}
-
-\section{Source Code}
-\begin{lstinputlisting}[language=python]{gaussian_classifier.py}
-\end{lstinputlisting}
 
 \end{document}
