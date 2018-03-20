@@ -86,9 +86,16 @@ class GaussianClassifier():
         # Calculate the covariance matrices
         if(self.lda):
             self.covariance = np.cov(self.x_train, rowvar=False)
+            self.covariance_inverse = np.linalg.inv(self.covariance)
+            self.covariance_det = np.linalg.det(self.covariance)
         else:
             self.covariance1 = np.cov(class1_data, rowvar=False)
+            self.covariance1_inverse = np.linalg.inv(self.covariance1)
+            self.covariance1_det = np.linalg.det(self.covariance1)
+
             self.covariance2 = np.cov(class2_data, rowvar=False)
+            self.covariance2_inverse = np.linalg.inv(self.covariance2)
+            self.covariance2_det = np.linalg.det(self.covariance2)
 
     def predict(self, x, y):
         x_predict = np.array([x, y])
@@ -112,9 +119,31 @@ class GaussianClassifier():
         else:
             return 1
 
+    def qda_decision_boundary(self, x, y):
+
+        X = np.stack((x, y), axis=-1).reshape(-1, 2)
+
+        def decision_function(X):
+            X_minus_mu1 = X - self.mu1
+            X_minus_mu2 = X - self.mu2
+
+            d1 = np.dot(X_minus_mu1.T, np.dot(self.covariance1_inverse,
+                                              X_minus_mu1)) - (1 / 2) * math.log(self.covariance1_det)
+
+            d2 = np.dot(X_minus_mu2.T, np.dot(self.covariance2_inverse,
+                                              X_minus_mu2)) - (1 / 2) * math.log(self.covariance2_det)
+
+            diff = d1 - d2
+
+            return diff
+
+        values = np.apply_along_axis(decision_function, 1, X)
+
+        return values.reshape(*x.shape)
+
     def plot(self):
         plt.scatter(*zip(*self.x_train), c=self.y_train)
-        x = np.linspace(-2, 2, 1000)
+        x = np.linspace(-5, 5, 1000)
 
         if(self.lda):
             covariance_inverse = np.linalg.inv(self.covariance)
@@ -140,37 +169,24 @@ class GaussianClassifier():
             plt.ylabel('y')
             plt.savefig("lda.png")
         else:
-            a = 2.092
+            x = np.arange(-5, 5, 0.01)
+            y = np.arange(-5, 5, 0.01)
 
-            x_points = []
-            y_points = []
+            X, Y = np.meshgrid(x, y)
 
-            for x_point in x:
-                b = 5.722 * x_point + 5.497
-                c = (1.681 * (x_point ** 2)) - (6.081 * x_point) - 18.873
+            decision_boundary = plt.contour(
+                X, Y, self.qda_decision_boundary(X, Y), levels=[0], label="QDA decision boundary")
 
-                try:
-                    y1, y2 = solve_quadratic_equation(a, b, c)
-                except:
-                    continue
+            decision_boundary.collections[0].set_label("QDA decision boundary")
+            plt.legend(loc="upper left")
 
-                x_points.append(x_point)
-                y_points.append(y1)
-
-            decision_boundary, = plt.plot(
-                x_points,
-                y_points,
-                label="QDA decision boundary"
-            )
-
-            plt.legend(handles=[decision_boundary])
             plt.xlabel('x')
             plt.ylabel('y')
             plt.savefig("qda.png")
 
 
 if __name__ == "__main__":
-    classifier = GaussianClassifier(lda=True)
+    classifier = GaussianClassifier()
 
     with open("dataset.pkl", "rb") as file:
         dataset = pickle.load(file)
