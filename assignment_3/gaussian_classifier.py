@@ -1,5 +1,4 @@
 import math
-import pickle
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,18 +17,6 @@ def generate_dataset():
     label[0:100] = 0
 
     return x, y, label
-
-
-def solve_quadratic_equation(a, b, c):
-    b_square_minus_four_ac = pow(b, 2) - 4 * a * c
-
-    if b_square_minus_four_ac < 0:
-        raise Exception("Imaginary Value")
-    else:
-        y1 = (-b + math.sqrt(b_square_minus_four_ac)) / (2 * a)
-        y2 = (-b - math.sqrt(b_square_minus_four_ac)) / (2 * a)
-
-        return y1, y2
 
 
 def gaussian_distribution_value(x, mu, sigma):
