@@ -130,9 +130,9 @@ class GaussianClassifier():
     def plot(self):
         plt.clf()
         plt.scatter(*zip(*self.x_train), c=self.y_train)
-        x = np.linspace(-1.5, 1.5, 1000)
 
         if(self.lda):
+            x = np.linspace(-1.5, 1.5, 1000)
             covariance_inverse = np.linalg.inv(self.covariance)
 
             # Solve for slope of line
