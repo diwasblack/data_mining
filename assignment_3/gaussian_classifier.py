@@ -117,8 +117,21 @@ class GaussianClassifier():
         x = np.linspace(-2, 2, 1000)
 
         if(self.lda):
+            covariance_inverse = np.linalg.inv(self.covariance)
+
+            # Solve for slope of line
+            m = np.dot(covariance_inverse, self.mu1 - self.mu2)
+
+            # Solve for the intercept
+            c1 = - np.dot(self.mu1.T,
+                          np.dot(covariance_inverse, self.mu1)) / 2.0
+            c2 = np.dot(self.mu2.T, np.dot(covariance_inverse, self.mu2)) / 2.0
+
+            # Calculate the intercept
+            c = c1 + c2
+
             # Calculate y
-            y = -0.282 * x + 1.973
+            y = - (m[0] / m[1]) * x - c / m[1]
 
             decision_boundary, = plt.plot(
                 x, y, label="LDA decision boundary")
@@ -157,7 +170,7 @@ class GaussianClassifier():
 
 
 if __name__ == "__main__":
-    classifier = GaussianClassifier()
+    classifier = GaussianClassifier(lda=True)
 
     with open("dataset.pkl", "rb") as file:
         dataset = pickle.load(file)
