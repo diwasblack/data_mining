@@ -17,8 +17,7 @@ def generate_dataset():
     label = np.ones_like(x)
     label[0:100] = 0
 
-    with open("dataset.pkl", "wb") as file:
-        pickle.dump((x, y, label), file)
+    return x, y, label
 
 
 def solve_quadratic_equation(a, b, c):
@@ -142,6 +141,7 @@ class GaussianClassifier():
         return values.reshape(*x.shape)
 
     def plot(self):
+        plt.clf()
         plt.scatter(*zip(*self.x_train), c=self.y_train)
         x = np.linspace(-5, 5, 1000)
 
@@ -186,13 +186,20 @@ class GaussianClassifier():
 
 
 if __name__ == "__main__":
-    classifier = GaussianClassifier()
+    # Generate dataset to use
+    print("Generating Dataset")
+    dataset = generate_dataset()
 
-    with open("dataset.pkl", "rb") as file:
-        dataset = pickle.load(file)
+    # Use LDA
+    lda_classifier = GaussianClassifier(lda=True)
+    print("Training LDA classifier")
+    lda_classifier.fit(*dataset)
+    print("Plotting decision boundary for LDA")
+    lda_classifier.plot()
 
-    classifier.fit(*dataset)
-
-    print(classifier.predict(0.0, -0.30))
-    print(classifier.predict(-0.99, 2.82))
-    classifier.plot()
+    # Use QDA
+    qda_classifier = GaussianClassifier()
+    print("Training QDA classifier")
+    qda_classifier.fit(*dataset)
+    print("Plotting decision boundary for QDA")
+    qda_classifier.plot()
