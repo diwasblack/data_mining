@@ -143,7 +143,7 @@ class GaussianClassifier():
     def plot(self):
         plt.clf()
         plt.scatter(*zip(*self.x_train), c=self.y_train)
-        x = np.linspace(-5, 5, 1000)
+        x = np.linspace(-1.5, 1.5, 1000)
 
         if(self.lda):
             covariance_inverse = np.linalg.inv(self.covariance)
@@ -169,13 +169,13 @@ class GaussianClassifier():
             plt.ylabel('y')
             plt.savefig("lda.png")
         else:
-            x = np.arange(-5, 5, 0.01)
-            y = np.arange(-5, 5, 0.01)
+            x = np.arange(-5, 1.5, 0.01)
+            y = np.arange(-1.5, 5, 0.01)
 
             X, Y = np.meshgrid(x, y)
 
             decision_boundary = plt.contour(
-                X, Y, self.qda_decision_boundary(X, Y), levels=[0], label="QDA decision boundary")
+                X, Y, self.qda_decision_boundary(X, Y), levels=[0], colors=("blue"))
 
             decision_boundary.collections[0].set_label("QDA decision boundary")
             plt.legend(loc="upper left")
