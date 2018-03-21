@@ -138,16 +138,23 @@ class GaussianClassifier():
             # Solve for slope of line
             m = np.dot(covariance_inverse, self.mu1 - self.mu2)
 
+            m_scaled = - m[0] / m[1]
+
             # Solve for the intercept
             c1 = - np.dot(self.mu1.T,
                           np.dot(covariance_inverse, self.mu1)) / 2.0
             c2 = np.dot(self.mu2.T, np.dot(covariance_inverse, self.mu2)) / 2.0
 
             # Calculate the intercept
-            c = c1 + c2
+            c = - (c1 + c2) / m[1]
 
             # Calculate y
-            y = - (m[0] / m[1]) * x - c / m[1]
+            y = m_scaled * x + c
+
+            print(
+                "Decision boundary for LDA is y = {} x + {}".format(
+                    m_scaled, c)
+            )
 
             decision_boundary, = plt.plot(
                 x, y, label="LDA decision boundary")
@@ -155,6 +162,7 @@ class GaussianClassifier():
             plt.xlabel('x')
             plt.ylabel('y')
             plt.savefig("lda.png")
+
         else:
             x = np.arange(-5, 1.5, 0.01)
             y = np.arange(-1.5, 5, 0.01)
