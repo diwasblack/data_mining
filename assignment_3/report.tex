@@ -36,9 +36,13 @@ equation in $X$.
     (\Sigma^{-1}\mu_{1} -  \Sigma^{-1}\mu_{2}) X + \frac{1}{2}(-\mu^{T}_{1}\Sigma^{-1}\mu_{1} + \mu^{T}_{2}\Sigma^{-1}\mu_{2}) = 0
 \end{equation}
 
-If we plot the decision boundary, we would get results similar to one
-shown in figure \ref{fig:lda_decision_boundary}.
+The decision boundary of LDA obtained for the data is given in equation \ref{eq:lda_boundary}
+whose plot is shown in figure \ref{fig:lda_decision_boundary}.
 
+\begin{equation}
+    \label{eq:lda_boundary}
+    y = -0.2908x + 2.0135
+\end{equation}
 
 \begin{figure}[!ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{lda.png}
@@ -58,7 +62,11 @@ Similarly, the general decision boundary of QDA for the given problem is shown i
 
 where, $\Sigma_{1}$ is the covariance of data that belongs to class 1, and $\Sigma_{2}$ is the covariance of data that belongs to class 2.
 
-The plot of decision boundary obtain is shown in figure \ref{fig:qda_decision_boundary}.
+The decision boundary of QDA obtained for the data is given in equation \ref{eq:qda_boundary} whose plot is shown in figure \ref{fig:qda_decision_boundary}.
+\begin{equation}
+    \label{eq:qda_boundary}
+    2.2167y^{2} + (5.2453x + 5.1203)y + 1.5364x^{2} + -5.2079x + -17.2261 = 0
+\end{equation}
 
 \begin{figure}[!ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{qda.png}
