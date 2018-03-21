@@ -106,25 +106,51 @@ class GaussianClassifier():
             return 1
 
     def qda_decision_boundary(self, x, y):
-
         X = np.stack((x, y), axis=-1).reshape(-1, 2)
 
+        # Compute the equation coefficients
+        a1 = self.covariance1_inverse[0][0]
+        b1 = self.covariance1_inverse[0][1]
+        c1 = self.covariance1_inverse[1][0]
+        d1 = self.covariance1_inverse[1][1]
+
+        a2 = self.covariance2_inverse[0][0]
+        b2 = self.covariance2_inverse[0][1]
+        c2 = self.covariance2_inverse[1][0]
+        d2 = self.covariance2_inverse[1][1]
+
+        mu11 = self.mu1[0]
+        mu12 = self.mu1[1]
+
+        mu21 = self.mu2[0]
+        mu22 = self.mu2[1]
+
+        a = d1 - d2
+        bxy = (c1 + b1 - c2 - b2)
+        by = -(c1 + b1) * mu11 - 2 * d1 * mu12 + \
+            (c2 + b2) * mu22 + 2 * d2 * mu22
+
+        cx2 = (a1 - a2)
+        cx = -2 * a1 * mu11 - (c1 + b1) * mu12 + 2 * \
+            a2 * mu21 + (c2 + b2) * mu22
+
+        cc1 = a1 * mu11 ** 2 + (c1 + b1) * mu11 * mu12 + d1 * \
+            mu12 ** 2 + (1 / 2) * math.log(self.covariance1_det)
+
+        cc2 = a2 * mu21 ** 2 + (c2 + b2) * mu21 * mu22 + d2 * \
+            mu22 ** 2 + (1 / 2) * math.log(self.covariance2_det)
+
+        c = cc1 - cc2
+
+        print("Decision boundary for QDA is {}y^2 + ({}x + {})y + {}x^2 + {}x + {}".format(a, bxy, by, cx2, cx, c))
+
         def decision_function(X):
-            X_minus_mu1 = X - self.mu1
-            X_minus_mu2 = X - self.mu2
+            x = X[0]
+            y = X[1]
 
-            d1 = np.dot(X_minus_mu1.T, np.dot(self.covariance1_inverse,
-                                              X_minus_mu1)) - (1 / 2) * math.log(self.covariance1_det)
-
-            d2 = np.dot(X_minus_mu2.T, np.dot(self.covariance2_inverse,
-                                              X_minus_mu2)) - (1 / 2) * math.log(self.covariance2_det)
-
-            diff = d1 - d2
-
-            return diff
+            return a * (y ** 2) + (bxy * x + by) * y + cx2 * (x ** 2) + cx * x + c
 
         values = np.apply_along_axis(decision_function, 1, X)
-
         return values.reshape(*x.shape)
 
     def plot(self):
