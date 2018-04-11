@@ -74,3 +74,16 @@ class LogisticRegression():
             [1 if value > 0.5 else 0 for value in values])
 
         return predicted_labels
+
+    def compute_accuracy(self, x_test, y_test):
+        y_predicted = self.predict(x_test)
+
+        test_size = x_test.shape[0]
+
+        tp_tn_sum = 0
+
+        for y1, y2 in zip(y_test, y_predicted):
+            if(y1 == y2):
+                tp_tn_sum += 1
+
+        return tp_tn_sum/test_size

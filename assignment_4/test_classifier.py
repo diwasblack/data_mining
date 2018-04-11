@@ -3,7 +3,6 @@ import logging
 import numpy as np
 import cloudpickle as pickle
 
-from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
 from logistic_regression import LogisticRegression
@@ -23,10 +22,9 @@ def main():
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
 
     classifier.fit(x_train, y_train)
+    accuracy = classifier.compute_accuracy(x_test, y_test)
 
-    y_predicted = classifier.predict(x_test)
-
-    logger.info("Accuracy: {}".format(accuracy_score(y_test, y_predicted)))
+    logger.info("Accuracy: {}".format(accuracy))
 
 
 if __name__ == "__main__":
