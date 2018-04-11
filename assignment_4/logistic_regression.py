@@ -19,7 +19,7 @@ def sigmoid_function(z):
 
 
 class LogisticRegression():
-    def __init__(self, learning_rate=0.5, threshold=0.005):
+    def __init__(self, learning_rate=0.005, threshold=0.005):
         self.learning_rate = learning_rate
         self.threshold = threshold
         self.sigmoid_vectorizer = np.vectorize(sigmoid_function)
