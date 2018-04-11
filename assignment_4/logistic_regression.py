@@ -1,4 +1,5 @@
 import math
+import logging
 
 import numpy as np
 
@@ -19,7 +20,7 @@ def sigmoid_function(z):
 
 
 class LogisticRegression():
-    def __init__(self, learning_rate=0.005, threshold=0.005):
+    def __init__(self, learning_rate=0.05, threshold=0.5):
         self.learning_rate = learning_rate
         self.threshold = threshold
         self.sigmoid_vectorizer = np.vectorize(sigmoid_function)
@@ -40,19 +41,25 @@ class LogisticRegression():
         self.thetas = np.random.uniform(-0.5,
                                         0.5, (1, self.input_dimension + 1))
 
+        logging.info("Training classifier")
+
         while(True):
             z = np.dot(x, self.thetas.T)
 
             predicted_values = self.sigmoid_vectorizer(z)
 
-            correction = y - predicted_values
+            error_signal = y - predicted_values
+
+            theta_updates = (1 / self.number_of_training_data) * \
+                np.dot(error_signal.T, x)
 
             # Perform batch update on the data
-            self.thetas = self.thetas + \
-                self.learning_rate * \
-                (1 / self.number_of_training_data) * np.dot(correction.T, x)
+            self.thetas = self.thetas + self.learning_rate * theta_updates
 
-            if(np.max(correction) <= self.threshold):
+            max_update = np.max(np.abs(theta_updates))
+            logging.info("Max correction for theta: {}".format((max_update)))
+
+            if(max_update <= self.threshold):
                 break
 
     def predict(self, x_predict):
