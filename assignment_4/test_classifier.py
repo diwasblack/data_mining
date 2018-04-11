@@ -2,9 +2,7 @@ import logging
 
 import cloudpickle as pickle
 
-from sklearn.model_selection import train_test_split
-
-from logistic_regression import LogisticRegression
+from digit_classifier import LogisticRegression, train_test_split
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)

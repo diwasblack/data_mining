@@ -19,6 +19,27 @@ def sigmoid_function(z):
     return value
 
 
+def train_test_split(x, y, test_size=0.33):
+    data_size = len(x)
+
+    # Generate random permutation of data set
+    p = np.random.permutation(data_size)
+
+    # Shuffle x and y
+    x = x[p]
+    y = y[p]
+
+    training_size = int((1 - test_size) * data_size)
+
+    x_train = x[:training_size]
+    x_test = x[training_size:]
+
+    y_train = y[:training_size]
+    y_test = y[training_size:]
+
+    return x_train, x_test, y_train, y_test
+
+
 class LogisticRegression():
     def __init__(self, learning_rate=0.05, threshold=0.5):
         self.learning_rate = learning_rate
@@ -33,7 +54,8 @@ class LogisticRegression():
         self.labels = list(set(y_train))
 
         if(len(self.labels) != 2):
-            raise Exception("Received multiple labels for binary classification")
+            raise Exception(
+                "Received multiple labels for binary classification")
 
         # Convert labels to binary values
         y_train = np.array([self.labels.index(x) for x in y_train])
@@ -97,4 +119,4 @@ class LogisticRegression():
             if(y1 == y2):
                 tp_tn_sum += 1
 
-        return tp_tn_sum/test_size
+        return tp_tn_sum / test_size
