@@ -29,6 +29,14 @@ class LogisticRegression():
         self.input_dimension = x_train.shape[1]
         self.number_of_training_data = x_train.shape[0]
 
+        # Obtain the labels from training set
+        self.labels = list(set(y_train))
+
+        if(len(self.labels) != 2):
+            raise Exception("Received multiple labels for binary classification")
+
+        # Convert labels to binary values
+        y_train = np.array([self.labels.index(x) for x in y_train])
         y = y_train.reshape(self.number_of_training_data, -1)
 
         # Bias terms to add
@@ -70,8 +78,11 @@ class LogisticRegression():
         z = np.dot(x, self.thetas.T)
         values = self.sigmoid_vectorizer(z)
 
-        predicted_labels = np.array(
+        predicted_class = np.array(
             [1 if value > 0.5 else 0 for value in values])
+
+        # Convert binary values to labels
+        predicted_labels = [self.labels[x] for x in predicted_class]
 
         return predicted_labels
 

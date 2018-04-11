@@ -1,6 +1,5 @@
 import logging
 
-import numpy as np
 import cloudpickle as pickle
 
 from sklearn.model_selection import train_test_split
@@ -15,7 +14,7 @@ def main():
     mnist23 = pickle.load(open("mnist23.data", "rb"))
 
     x = mnist23.data
-    y = np.array([1 if x == 3 else 0 for x in mnist23.target])
+    y = mnist23.target
 
     classifier = LogisticRegression()
 
