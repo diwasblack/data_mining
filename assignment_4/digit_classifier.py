@@ -2,6 +2,7 @@ import math
 import logging
 
 import numpy as np
+import cloudpickle as pickle
 
 
 def sigmoid_function(z):
@@ -120,3 +121,27 @@ class LogisticRegression():
                 tp_tn_sum += 1
 
         return tp_tn_sum / test_size
+
+
+def main():
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
+    logger = logging.getLogger(__name__)
+
+    mnist23 = pickle.load(open("mnist23.data", "rb"))
+
+    x = mnist23.data
+    y = mnist23.target
+
+    classifier = LogisticRegression()
+
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
+
+    classifier.fit(x_train, y_train)
+    accuracy = classifier.compute_accuracy(x_test, y_test)
+
+    logger.info("Accuracy: {}".format(accuracy))
+
+
+if __name__ == "__main__":
+    main()
