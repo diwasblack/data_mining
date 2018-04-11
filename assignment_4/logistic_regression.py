@@ -1,10 +1,28 @@
+import math
+
 import numpy as np
+
+
+def sigmoid_function(z):
+    """
+    Evaluate sigmoid function at point z
+    """
+    try:
+        value = 1.0 / (1 + math.exp(-1 * z))
+    except:
+        if(z > 0):
+            return 0.9999
+        else:
+            return 0.0001
+
+    return value
 
 
 class LogisticRegression():
     def __init__(self, learning_rate=0.5, threshold=0.005):
         self.learning_rate = learning_rate
         self.threshold = threshold
+        self.sigmoid_vectorizer = np.vectorize(sigmoid_function)
 
     def fit(self, x_train, y_train):
         self.input_dimension = x_train.shape[1]
@@ -19,12 +37,13 @@ class LogisticRegression():
         x = np.hstack((bias, x_train))
 
         # Randomly initialize thetas
-        self.thetas = np.random.rand(1, self.input_dimension + 1) - 0.5
+        self.thetas = np.random.uniform(-0.5,
+                                        0.5, (1, self.input_dimension + 1))
 
         while(True):
             z = np.dot(x, self.thetas.T)
 
-            predicted_values = 1.0 / (1 + np.exp(-1 * z))
+            predicted_values = self.sigmoid_vectorizer(z)
 
             correction = y - predicted_values
 
@@ -37,11 +56,14 @@ class LogisticRegression():
                 break
 
     def predict(self, x_predict):
-        x = np.hstack((np.array([1]), x_predict))
-        z = np.dot(x, self.thetas.T)
-        value = 1.0 / (1 + np.exp(-1 * z))
+        data_size = x_predict.shape[0]
+        bias = np.ones((data_size, 1))
+        x = np.hstack((bias, x_predict))
 
-        if(value > 0.5):
-            return 1
-        else:
-            return 0
+        z = np.dot(x, self.thetas.T)
+        values = self.sigmoid_vectorizer(z)
+
+        predicted_labels = np.array(
+            [1 if value > 0.5 else 0 for value in values])
+
+        return predicted_labels
