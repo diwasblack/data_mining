@@ -21,6 +21,9 @@ def sigmoid_function(z):
 
 
 def train_test_split(x, y, test_size=0.33):
+    """
+    Helper function to split the data into training set and test set
+    """
     data_size = len(x)
 
     # Generate random permutation of data set
@@ -39,6 +42,22 @@ def train_test_split(x, y, test_size=0.33):
     y_test = y[training_size:]
 
     return x_train, x_test, y_train, y_test
+
+
+def compute_accuracy(y_test, y_predicted):
+    """
+    Compute the accuracy of the classification labels
+    """
+
+    data_size = y_test.shape[0]
+
+    tp_tn_sum = 0
+
+    for y1, y2 in zip(y_test, y_predicted):
+        if(y1 == y2):
+            tp_tn_sum += 1
+
+    return tp_tn_sum / data_size
 
 
 class LogisticRegression():
@@ -109,19 +128,6 @@ class LogisticRegression():
 
         return predicted_labels
 
-    def compute_accuracy(self, x_test, y_test):
-        y_predicted = self.predict(x_test)
-
-        test_size = x_test.shape[0]
-
-        tp_tn_sum = 0
-
-        for y1, y2 in zip(y_test, y_predicted):
-            if(y1 == y2):
-                tp_tn_sum += 1
-
-        return tp_tn_sum / test_size
-
 
 def main():
     logging.basicConfig(
@@ -138,7 +144,8 @@ def main():
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
 
     classifier.fit(x_train, y_train)
-    accuracy = classifier.compute_accuracy(x_test, y_test)
+    y_predicted = classifier.predict(x_test)
+    accuracy = compute_accuracy(y_test, y_predicted)
 
     logger.info("Accuracy: {}".format(accuracy))
 
