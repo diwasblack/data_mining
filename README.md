@@ -61,3 +61,7 @@ data set to find its decision boundary respectively.  Plot your decision
 boundaries in your answer sheet as well.  Note that, when generating y, a
 random normalized noise is added with a 0.3 factor. You can change the value
 to see how your decision boundary might be affected.
+
+Assignment 4
+------------
+See the jupyter notebook [here.](https://github.com/diwasblack/data_mining/blob/master/assignment_4/Homework%204.ipynb)
