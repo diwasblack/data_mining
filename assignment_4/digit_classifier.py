@@ -9,13 +9,13 @@ def sigmoid_function(z):
     """
     Evaluate sigmoid function at point z
     """
-    try:
+
+    if(z >= 500):
+        return 0.9999
+    elif(z <= -500):
+        return 0.0001
+    else:
         value = 1.0 / (1 + math.exp(-1 * z))
-    except:
-        if(z > 0):
-            return 0.9999
-        else:
-            return 0.0001
 
     return value
 
