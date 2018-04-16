@@ -129,25 +129,35 @@ class LogisticRegression():
         return predicted_labels
 
 
-def main():
+def train_and_test_classifier(x_train, y_train, x_test, y_test):
+    """
+    Helper function to train the classifier and obtain its accuracy
+    """
+
     logging.basicConfig(
         format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
     logger = logging.getLogger(__name__)
 
-    mnist23 = pickle.load(open("mnist23.data", "rb"))
-
-    x = mnist23.data
-    y = mnist23.target
-
     classifier = LogisticRegression()
-
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
 
     classifier.fit(x_train, y_train)
     y_predicted = classifier.predict(x_test)
     accuracy = compute_accuracy(y_test, y_predicted)
 
     logger.info("Accuracy: {}".format(accuracy))
+
+
+def main():
+
+    mnist23 = pickle.load(open("mnist23.data", "rb"))
+
+    x = mnist23.data
+    y = mnist23.target
+
+    # Perform train test split on the data
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
+
+    train_and_test_classifier(x_train, y_train, x_test, y_test)
 
 
 if __name__ == "__main__":
